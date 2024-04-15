@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .trade-data {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WebSocket Frontend</h1>
+        <div id="tradeContainer"></div>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:3000'); // WebSocket server address
+        const tradeContainer = document.getElementById('tradeContainer');
+
+        socket.onopen = function () {
+            console.log('WebSocket connection established.');
+        };
+
+        socket.onmessage = function (event) {
+            const tradeData = JSON.parse(event.data);
+            console.log(tradeData);
+            displayTradeData(tradeData);
+        };
+
+        socket.onerror = function (error) {
+            console.error('WebSocket error:', error);
+        };
+
+        function displayTradeData(tradeData) {
+            const tradeElement = document.createElement('div');
+            tradeElement.classList.add('trade-data');
+            tradeElement.textContent = JSON.stringify(tradeData);
+            tradeContainer.appendChild(tradeElement);
+        }
+    </script>
+</body>
+</html>
